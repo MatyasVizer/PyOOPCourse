@@ -1,8 +1,9 @@
 import login
 import actions
 
+
 def main():
-    logIn()
+    result = login.logIn()
     actions()
 
 main()

@@ -27,11 +27,38 @@ def createAccount():
     accountNumber = token.createToken()
     accounts["{accountNumber}"] = Account(name, deposit, accountNumber)
     print("Your account has been successfully created!")
-    _printAccountDetails(accounts["{accountNumber}"])
+    accountDetails.printAccountDetails(accounts["{accountNumber}"])
 
 
-def _printAccountDetails(object):
-    print("\nAccount details:")
-    print(f"\nName: {object.name}")
-    print(f"\nDeposit: ${object.deposit}")
-    print(f"\nAccount Number: {object.number}")
+def validateAccount():
+    print("Please type your name:")
+    try:
+        name = str(input())
+    except ValueError:
+        print("\nWrong input type, please try again")
+        validateAccount()
+    print("Please input your account number:")
+    try:
+        accNumber = int(input())
+    except ValueError:
+        print("\nWrong input type, please try again")
+        validateAccount()
+    storedName = accountDetails.getName(accounts["{accNumber}"])
+    storedNumber = accountDetails.getNumber(accounts["{accNumber}"])
+    if name == storedName & accNumber == storedNumber:
+        return None
+
+
+class accountDetails():
+
+    def printAccountDetails(self):
+        print("\nAccount details:")
+        print(f"\nName: {self.name}")
+        print(f"\nDeposit: ${self.deposit}")
+        print(f"\nAccount Number: {self.number}")
+
+    def getName(self):
+        return self.name
+    
+    def getNumber(self):
+        return self.name

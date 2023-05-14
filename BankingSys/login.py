@@ -1,5 +1,6 @@
 import accounts
 
+
 def logIn():
     print("Press 1 to open a new account, press 2 to open an existing one")
     try:
