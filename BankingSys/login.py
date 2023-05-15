@@ -7,7 +7,7 @@ def logIn():
         choice = int(input())
     except ValueError:
         print("\nWrong input type, please try again.")
-        main()
+        logIn()
     if choice == 1:
         accounts.createAccount()
     elif choice == 2:
