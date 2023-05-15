@@ -1,4 +1,4 @@
-import token
+import tokenizer as token
 
 
 accounts = dict()
@@ -11,7 +11,6 @@ class Account():
         self.number = accNumber
         self.password = Password
         self.state = "logged_out"
-        self.sessionId = "none"
 
     def deposit(cls):
         print("Please input the size of the deposit:")
@@ -25,6 +24,7 @@ class Account():
         else:
             print("Please input a value bigger than 0.")
             deposit()
+        cls.accountActions()
 
     def withdraw(cls):
         print("Please input the size of the withdrawal:")
@@ -38,26 +38,52 @@ class Account():
         else:
             print("Please input a value bigger than 0.")
             withdraw()
+        cls.accountActions()
 
     def printAccountDetails(cls):
         print("\nAccount details:")
         print(f"\nName: {cls.name}")
-        print(f"\nDeposit: ${cls.deposit}")
+        print(f"\nBalance: ${cls.balance}")
         print(f"\nAccount Number: {cls.number}")
+        print(f"\nPassword: {cls.password}")
 
     def getPassword(cls):
         return cls.password
 
     def getNumber(cls):
         return cls.name
-    
+
     def logged_in(cls):
         cls.state = "logged_in"
-        cls.sessionId = token.generateSessionId
 
     def logged_out(cls):
         cls.state = "logged_out"
-        cls.sessionId = "None"
+
+    def getBalance(cls):
+        print(f"This is your balance: ${cls.balance}")
+
+    def accountActions(cls):
+        print("\nWelcome to Account Actions. Please type 1 to get your account balance.")
+        print("\nPlease type 2 if you would like to deposit funds and type 3 if you would like to withdraw money")
+        print("\nPlease type 4 if you would like to quit the application.")
+        try:
+            choice = int(input())
+        except ValueError:
+            print("\nWrong input type, please try again.")
+            cls.accountActions()
+        try:
+            if choice == 1:
+                cls.getBalance()
+                cls.accountActions()
+            elif choice == 2:
+                cls.deposit()
+            elif choice == 3:
+                cls.withdraw()
+            else:
+                print("\nWrong number, please try again.")
+        except NameError:
+            print("\nError occured during login, please try again.")
+            cls.accountActions()
 
 
 def createAccount():
@@ -73,45 +99,38 @@ def createAccount():
     except ValueError:
         print("\nWrong input type, please try again")
         createAccount()
-    accountNumber = token.createToken()
-    accounts["{accountNumber}"] = Account(name, accountNumber, password)
+    accountNumber = token.Token.createToken()
+    accounts[accountNumber] = Account(name, accountNumber, password)
     print("\nYour account has been successfully created!\nPlease log in to your account.")
-    accountDetails.printAccountDetails(accounts["{accountNumber}"])
+    Account.printAccountDetails(accounts[accountNumber])
     validateAccount()
+    return accounts[accountNumber]
 
 
 def validateAccount():
     print("\nPlease input your account number:")
     try:
         accNumber = int(input())
+        account = accounts[accNumber]
     except ValueError:
         print("\nWrong input type, please try again")
         validateAccount()
-    print("\nPlease input your password number:")
+    print("\nPlease input your password:")
     try:
-        password = int(input())
+        password = str(input())
     except ValueError:
         print("\nWrong input type, please try again")
         validateAccount()
-    storedNumber = Account.getNumber(accounts["{accNumber}"])
-    storedPassword = Account.getPassword(accounts["{accNumber}"])
-    if accNumber == storedNumber & password == storedPassword:
-        return accounts["{accNumber}"]
-    else:
-        print("\nYour password or your account number was incorrect, please try again.")
+    try:
+        storedPassword = account.getPassword()
+        print(f"Storedpw: {storedPassword}")
+        if password == storedPassword:
+            account.logged_in()
+            return account
+        else:
+            print("\nYour password or your account number was incorrect, please try again.")
+            validateAccount()
+    except NameError:        
+        print("\nSomething went wrong, please try again")
         validateAccount()
 
-
-class accountDetails():
-
-    def printAccountDetails(self):
-        print("\nAccount details:")
-        print(f"\nName: {self.name}")
-        print(f"\nDeposit: ${self.deposit}")
-        print(f"\nAccount Number: {self.number}")
-
-    def getName(self):
-        return self.name
-    
-    def getNumber(self):
-        return self.name

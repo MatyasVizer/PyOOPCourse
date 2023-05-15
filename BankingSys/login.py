@@ -8,9 +8,15 @@ def logIn():
     except ValueError:
         print("\nWrong input type, please try again.")
         logIn()
-    if choice == 1:
-        accounts.createAccount()
-    elif choice == 2:
-        accounts.validateAccount()
-    else:
-        print("\nWrong number, please try again.")
+    try:
+        if choice == 1:
+            account = accounts.createAccount()
+            return account
+        elif choice == 2:
+            account = accounts.validateAccount()
+            return account
+        else:
+            print("\nWrong number, please try again.")
+    except NameError:
+        print("\nError occured during login, please try again.")
+        logIn()

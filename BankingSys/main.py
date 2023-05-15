@@ -1,9 +1,9 @@
 import login
-import accounts
-
 
 
 def main():
-    result = login.logIn()
+    account = login.logIn()
+    account.accountActions()
+
 
 main()
